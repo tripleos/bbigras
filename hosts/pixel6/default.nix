@@ -4,11 +4,11 @@ let
   nurNoPkgs = import nur { pkgs = null; nurpkgs = pkgs; };
 in
 {
-  user.shell = "${pkgs.zsh}/bin/zsh";
+  user.shell = "${pkgs.fish}/bin/fish";
 
   user = {
-    gid = 10382;
-    uid = 10382;
+    gid = 10160;
+    uid = 10160;
   };
 
   nix.extraOptions = ''
@@ -43,12 +43,58 @@ in
   # Backup etc files instead of failing to activate generation if a file already exists in /etc
   environment.etcBackupExtension = ".bak";
 
+  environment.motd = null;
   environment.etc = {
     "tmp-sshd".text = ''
       HostKey /data/data/com.termux.nix/files/home/ssh_host_ed25519_key
       Port 8022
     '';
   };
+  environment.sessionVariables = {
+    EDITOR = "doom-emacs";
+  };
+
+  android-integration = {
+    am.enable = true;
+    termux-open.enable = true;
+    termux-open-url.enable = true;
+    termux-setup-storage.enable = true;
+    xdg-open.enable = true;
+  };
+
+  terminal = {
+    font = "${pkgs.nerdfonts.override { fonts = [ "Iosevka" ]; }}/share/fonts/truetype/NerdFonts/IosevkaNerdFontMono-Regular.ttf";
+    colors = {
+      background = "#1e1e2e";
+      foreground = "#cdd6f4";
+
+      color0 = "#45475a";
+      color8 = "#585b70";
+
+      color1 = "#f38ba8";
+      color9 = "#f38ba8";
+
+      color2 = "#a6e3a1";
+      color10 = "#a6e3a1";
+
+      color3 = "#f9e2af";
+      color11 = "#f9e2af";
+
+      color4 = "#89b4fa";
+      color12 = "#89b4fa";
+
+      color5 = "#f5c2e7";
+      color13 = "#f5c2e7";
+
+      color6 = "#94e2d5";
+      color14 = "#94e2d5";
+
+      color7 = "#bac2de";
+      color15 = "#a6adc8";
+    };
+  };
+
+  time.timeZone = "America/Montreal";
 
   # Read the changelog before changing this value
   system.stateVersion = "20.09";
@@ -61,28 +107,18 @@ in
   home-manager.useGlobalPkgs = true;
 
   home-manager.config =
-    { pkgs, config, lib, ... }:
+    { pkgs, lib, ... }:
     {
       # Read the changelog before changing this value
       home.stateVersion = "20.09";
-
-      home.activation = {
-        copyFont =
-          let
-            font_src = "${pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; }}/share/fonts/truetype/NerdFonts/FiraCodeNerdFontMono-Regular.ttf";
-            font_dst = "${config.home.homeDirectory}/.termux/font.ttf";
-          in
-          lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-            ( test ! -e "${font_dst}" || test $(sha1sum "${font_src}"|cut -d' ' -f1 ) != $(sha1sum "${font_dst}" |cut -d' ' -f1)) && $DRY_RUN_CMD install $VERBOSE_ARG -D "${font_src}" "${font_dst}"
-          '';
-      };
 
       imports = [
         ../../users/bbigras/core/atuin.nix
         ../../users/bbigras/core/git.nix
         ../../users/bbigras/core/jujutsu.nix
         ../../users/bbigras/core/tmux.nix
-        ../../users/bbigras/core/zsh.nix
+        ../../users/bbigras/core/fish.nix
+        ../../users/bbigras/core/yazi.nix
         # ../../users/bbigras/core/emacs
         nurNoPkgs.repos.rycee.hmModules.emacs-init
         catppuccin.homeManagerModules.catppuccin
@@ -158,10 +194,9 @@ in
         };
         starship.enable = true;
         tealdeer.enable = true;
-        yazi.enable = true;
         zoxide.enable = true;
         zellij.enable = true;
-        zsh = {
+        fish = {
           shellAliases = {
             ssh-server = "${pkgs.openssh}/bin/sshd -f /etc/tmp-sshd";
           };
@@ -172,8 +207,11 @@ in
         libqalculate
         cachix
         croc
+        sendme
+        dumbpipe
         doggo
         fd
+        hyperfine
         just
         mosh
         (neofetch.override { x11Support = false; })
@@ -187,7 +225,6 @@ in
         kubernetes
         kubernetes-helm
         k9s
-        kdash
         kubie
         kubectl
         kubectx
@@ -201,6 +238,11 @@ in
         aichat
         zrok
         restic
+        incus.client
+        glasskube
+        talosctl
+        nix-output-monitor
+        attic-client
 
         (pkgs.doomEmacs {
           doomDir = ../../doomDir;

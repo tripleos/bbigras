@@ -38,10 +38,12 @@
     ./btop.nix
     ./git.nix
     ./jujutsu.nix
-    # ./emacs
+    ./emacs
     ./tmux.nix
     ./xdg.nix
-    ./zsh.nix
+    ./fish.nix
+    ./yazi.nix
+    ./zed-editor.nix
   ];
 
   catppuccin = {
@@ -58,7 +60,7 @@
 
   home = {
     username = "bbigras";
-    stateVersion = "22.11";
+    stateVersion = "24.05";
     packages = with pkgs; [
       nix-closure-size
 
@@ -73,9 +75,10 @@
       colordiff
 
       # net
+      dumbpipe
       croc
-      localsend
       rclone
+      sendme
       tailscale
       tcpdump
       webwormhole
@@ -94,7 +97,6 @@
       procs
       pwgen
       sd # find & replace
-      bandwhich
       doggo
       btop
 
@@ -111,10 +113,7 @@
 
       # rust
       cargo
-      cargo-audit
-      cargo-outdated
       cargo-flamegraph
-      cargo-sweep
       cargo-tarpaulin
       cargo-udeps
 
@@ -155,9 +154,13 @@
       devpod
       altair
       broot
-      ueberzugpp # for yazi
       distrobox
       dbgate
+      keet
+      incus.client
+      srgn
+      attic-client
+      aider-chat
 
       (pkgs.doomEmacs {
         doomDir = ../../../doomDir;
@@ -198,6 +201,7 @@
       extraPackages = with pkgs.bat-extras; [ batman ];
     };
     carapace.enable = true;
+    chromium.enable = true;
     eza.enable = true;
     jq.enable = true;
     fzf = {
@@ -229,11 +233,9 @@
         VerifyHostKeyDNS = "ask";
       };
     };
-    starship.enable = true;
     tealdeer.enable = true;
     zoxide.enable = true;
     nushell.enable = false;
-    yazi.enable = true;
     zellij.enable = true;
   };
 

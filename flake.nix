@@ -8,6 +8,7 @@
       "https://nix-on-droid.cachix.org"
       "https://pre-commit-hooks.cachix.org"
       "https://cache.lix.systems"
+      "https://cosmic.cachix.org"
     ];
     extra-trusted-public-keys = [
       "bbigras-nix-config.cachix.org-1:aXL6Q9Oi0jyF79YAKRu17iVNk9HY0p23OZX7FA8ulhU="
@@ -15,6 +16,7 @@
       "nix-on-droid.cachix.org-1:56snoMJTXmDRC1Ei24CmKoUqvHJ9XCp+nidK7qkMQrU="
       "pre-commit-hooks.cachix.org-1:Pkk3Panw5AW24TOv6kz3PvLhlH8puAsJTBbOPmBo7Rc="
       "cache.lix.systems:aBnZUw8zA7H35Cz2RyKFVs3H4PlGTLawyY5KRbvJR8o="
+      "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
     ];
   };
 
@@ -29,6 +31,12 @@
       };
     };
 
+    nixos-cosmic = {
+      url = "github:lilyinstarlight/nixos-cosmic";
+      #url = "github:lilyinstarlight/nixos-cosmic?ref=d903c5edacd867e3f1479098e83df21098961327";
+      #inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     truecolor-check = {
       url = "git+https://gist.github.com/fdeaf79e921c2f413f44b6f613f6ad53.git";
       flake = false;
@@ -40,6 +48,7 @@
     };
 
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs_zed.url = "github:nixos/nixpkgs?rev=e4f302deb8cf324905ba93e650f2f4ef24b33606";
 
     lix = {
       url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
@@ -88,7 +97,6 @@
       inputs = {
         flake-compat.follows = "flake-compat";
         flake-parts.follows = "flake-parts";
-        flake-utils.follows = "flake-utils";
         nixpkgs.follows = "nixpkgs";
         pre-commit-hooks-nix.follows = "git-hooks";
       };
@@ -125,16 +133,10 @@
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
     };
 
-    # copilot_el = {
-    #   url = "github:copilot-emacs/copilot.el";
-    #   flake = false;
-    # };
-
-    copilot_pkgs.url = "github:bbigras/nixpkgs/copilot";
-    copilot-node-server_pkgs.url = "github:bbigras/nixpkgs/copilot-node-server";
+    # copilot_pkgs.url = "github:bbigras/nixpkgs/copilot";
+    # copilot-node-server_pkgs.url = "github:bbigras/nixpkgs/copilot-node-server";
 
     envrc = {
       url = "github:siddharthverma314/envrc";
@@ -151,7 +153,7 @@
       inputs.home-manager.follows = "home-manager";
     };
 
-    catppuccin.url = "github:catppuccin/nix";
+    catppuccin.url = "github:catppuccin/nix?rev=f52d2fc7c4f513c1a5d89f2911611333aee339da";
 
     systems.url = "github:nix-systems/default";
 
@@ -181,10 +183,11 @@
               allowUnfree = false;
               allowAliases = true;
               allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
-                "broadcom-sta"
+                "keet"
                 "steam"
                 "steam-original"
                 "steam-run"
+                "steam-unwrapped"
               ];
             };
           };
@@ -202,7 +205,6 @@
               shellcheck = {
                 enable = true;
                 excludes = [
-                  "users/bbigras/core/p10k-config/p10k.zsh"
                 ];
               };
               statix.enable = false;

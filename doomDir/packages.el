@@ -31,10 +31,10 @@
 
 ;; (unpin! projectile)
 
-(package! projectile :pin "0163b335a18af0f077a474d4dc6b36e22b5e3274")
+(package! projectile)
 (package! crux)
 
-;; (package! copilot)
+(package! copilot)
 (package! catppuccin-theme)
 
 ;; (use-package! projectile

@@ -8,14 +8,15 @@
     sops-nix.nixosModules.sops
     catppuccin.nixosModules.catppuccin
     ./openssh.nix
-    ./podman.nix
     ./resolved.nix
     ./solo2.nix
     ./tailscale.nix
     ./tmux.nix
-    ./zsh.nix
   ];
 
+  environment.systemPackages = with pkgs; [ nix-output-monitor ];
+
+  boot.initrd.systemd.enable = true;
   boot.kernelParams = [ "log_buf_len=10M" ];
   services.systembus-notify.enable = true;
 
@@ -43,8 +44,8 @@
 
   programs = {
     command-not-found.enable = false;
+    localsend.enable = true;
     mosh.enable = true;
-    zsh.enableGlobalCompInit = false;
   };
 
   security = {
@@ -69,13 +70,17 @@
       ln -sv ${pkgs.path} $out/nixpkgs
     '';
 
+    switch = {
+      enable = false;
+      enableNg = true;
+    };
+
     stateVersion = "22.11";
   };
 
   time.timeZone = "America/Montreal";
 
   systemd = {
-    enableUnifiedCgroupHierarchy = true;
     network.wait-online.anyInterface = true;
   };
 

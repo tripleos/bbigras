@@ -8,7 +8,8 @@ in
     [
       ../../core
       ../../dev
-      ../../dev/virt-manager.nix
+      # ../../dev/virt-manager.nix
+      ../../dev/incus.nix
 
       # Include the results of the hardware scan.
       ../../hardware/hardware-configuration-work.nix
@@ -21,12 +22,14 @@ in
       ../../users/bbigras
     ] ++ (if builtins.pathExists (builtins.getEnv "PWD" + "/secrets/at_work.nix") then [ (builtins.getEnv "PWD" + "/secrets/at_work.nix") ] else [ ]);
 
-  boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernel.sysctl = {
     "kernel.sysrq" = 1;
     # "fs.inotify.max_user_watches" = 524288;
     # "vm.swappiness" = 1;
   };
+
+  virtualisation.docker.enable = true;
 
   environment.systemPackages = with pkgs; [ linuxPackages_zen.bcc ];
 
@@ -80,15 +83,5 @@ in
       ../../users/bbigras/trusted
       nurNoPkgs.repos.rycee.hmModules.emacs-init
     ];
-
-    wayland.windowManager.sway = {
-      config = {
-        input = {
-          "1118:1974:Microsoft_Comfort_Curve_Keyboard_3000" = {
-            xkb_numlock = "enabled";
-          };
-        };
-      };
-    };
   };
 }

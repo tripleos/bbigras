@@ -45,7 +45,6 @@
     # anytype
 
     joplin-desktop
-    # megasync
 
     xournalpp
     space-station-14-launcher
@@ -59,7 +58,6 @@
   ];
 
   services = {
-    # megasync.enable = true;
     # kdeconnect.enable = true;
   };
 }

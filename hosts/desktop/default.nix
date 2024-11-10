@@ -25,12 +25,13 @@ in
       ../../core
       ../../services/veilid.nix
       ../../dev
-      ../../dev/virt-manager.nix
+      #../../dev/virt-manager.nix
       ../../dev/incus.nix
 
       # Include the results of the hardware scan.
       ../../hardware/hardware-configuration-desktop.nix
       ../../hardware/efi.nix
+      ../../hardware/qmk.nix
       #../../hardware/secureboot.nix
 
       common-pc
@@ -43,7 +44,7 @@ in
       # ./aarch64.nix
 
       ../../graphical
-      ../../graphical/gnome.nix
+      # ../../graphical/gnome.nix
       ../../graphical/trusted.nix
 
       # ../../dev/rust-embeded.nix
@@ -74,20 +75,8 @@ in
 
   boot.plymouth.enable = true;
 
-  networking.interfaces."enp6s0".wakeOnLan.enable = true;
-  # boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
-  boot = {
-    extraModulePackages = with config.boot.kernelPackages; [
-      # v4l2loopback.out
-    ];
-    kernelModules = [
-      # "v4l2loopback"
-    ];
-    extraModprobeConfig = ''
-      # options v4l2loopback exclisive_caps=1 card_label="Virtual Camera"
-    '';
-  };
+  networking.interfaces."enp6s0".wakeOnLan.enable = true;
 
   boot = {
     binfmt.registrations.aarch64 = {
@@ -120,21 +109,6 @@ in
   };
 
   powerManagement.cpuFreqGovernor = "performance";
-
-  hardware.opengl = {
-    enable = true;
-    extraPackages = with pkgs; [
-      libva
-      vaapiVdpau
-      libvdpau-va-gl
-      amdvlk
-    ];
-    extraPackages32 = with pkgs; [
-      driversi686Linux.amdvlk
-    ];
-  };
-  boot.initrd.kernelModules = [ "amdgpu" ];
-
 
   # hardware.enableRedistributableFirmware = true;
   networking.hostName = "desktop"; # Define your hostname.
@@ -178,7 +152,6 @@ in
   networking.firewall.allowedTCPPorts = [
     9977
     9988
-    8096 # jellyfin
     21000 # immersed
     21013 # immersed
     8077 # qBittorrent
@@ -209,18 +182,31 @@ in
   #   enableWebUI = true;
   # };
 
+  services.ollama = {
+    enable = false;
+    acceleration = "rocm";
+    environmentVariables = {
+      HCC_AMDGPU_TARGET = "gfx1031"; # used to be necessary, but doesn't seem to anymore
+    };
+    rocmOverrideGfx = "10.3.1";
+  };
+
+  services.open-webui = {
+    enable = false;
+    host = "0.0.0.0";
+  };
+
   environment.systemPackages = with pkgs; [
     fwupd
   ];
+
+  virtualisation.docker.enable = true;
 
   services.fwupd.enable = true;
 
   services.flatpak.enable = true;
 
-  services.jellyfin = {
-    enable = true;
-    openFirewall = true;
-  };
-
-  services.earlyoom.enable = true;
+  services.earlyoom.enable = false;
+  services.desktopManager.cosmic.enable = true;
+  services.displayManager.cosmic-greeter.enable = true;
 }

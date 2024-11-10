@@ -3,6 +3,9 @@
 {
   home = {
     packages = with pkgs; [
+      kdiff3
+      lazyjj
+      meld
       watchman
     ];
   };
@@ -15,14 +18,24 @@
     jujutsu = {
       enable = true;
       settings = {
+        aliases = {
+          l = [ "log" "-r" "(trunk()..@):: | (trunk()..@)-" ];
+          dlog = [ "log" "-r" ];
+        };
         core.fsmonitor = "watchman";
-        ui.allow-filesets = true;
         user = {
           name = "Bruno Bigras";
           email = "bigras.bruno@gmail.com";
         };
         template-aliases = {
           "format_short_signature(signature)" = "signature.username()";
+        };
+        ui.diff-editor = "meld-3";
+        revset-aliases = {
+          "HEAD" = "@-";
+          "desc(x)" = "description(x)";
+          "user()" = ''user("bigras.bruno@gmail.com")'';
+          "user(x)" = "author(x) | committer(x)";
         };
       };
     };
