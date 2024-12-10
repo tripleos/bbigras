@@ -161,19 +161,6 @@
       srgn
       attic-client
       aider-chat
-
-      (pkgs.doomEmacs {
-        doomDir = ../../../doomDir;
-        doomLocalDir = "~/.local/share/nix-doom";
-        extraBinPackages = with pkgs; [
-          nodejs
-          config.programs.ripgrep.package
-          config.programs.git.package
-          config.programs.fd.package
-          nil
-          python3Minimal
-        ];
-      })
     ];
     shellAliases = {
       cls = "clear";
@@ -204,6 +191,14 @@
     chromium.enable = true;
     eza.enable = true;
     jq.enable = true;
+    kubecolor = {
+      enable = true;
+      enableAlias = true;
+      settings = {
+        preset = "dark";
+        paging = "auto";
+      };
+    };
     fzf = {
       enable = true;
       tmux.enableShellIntegration = true;
@@ -214,12 +209,21 @@
     gpg.enable = true;
     navi.enable = true;
     nix-index.enable = true;
+    nix-your-shell.enable = true;
     ripgrep.enable = true;
     sqls.enable = true;
 
     bashmount.enable = true;
 
-    rio.enable = true;
+    rio = {
+      enable = true;
+      settings = {
+        fonts = {
+          family = "Iosevka Nerd Font";
+          size = 15;
+        };
+      };
+    };
     ssh = {
       enable = true;
       controlMaster = "auto";
