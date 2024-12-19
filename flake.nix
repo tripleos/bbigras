@@ -7,7 +7,6 @@
       "https://nix-community.cachix.org"
       "https://nix-on-droid.cachix.org"
       "https://pre-commit-hooks.cachix.org"
-      "https://cache.lix.systems"
       "https://cosmic.cachix.org"
     ];
     extra-trusted-public-keys = [
@@ -15,7 +14,6 @@
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "nix-on-droid.cachix.org-1:56snoMJTXmDRC1Ei24CmKoUqvHJ9XCp+nidK7qkMQrU="
       "pre-commit-hooks.cachix.org-1:Pkk3Panw5AW24TOv6kz3PvLhlH8puAsJTBbOPmBo7Rc="
-      "cache.lix.systems:aBnZUw8zA7H35Cz2RyKFVs3H4PlGTLawyY5KRbvJR8o="
       "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
     ];
   };
@@ -48,17 +46,10 @@
     };
 
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs_zed.url = "github:nixos/nixpkgs?rev=e4f302deb8cf324905ba93e650f2f4ef24b33606";
+    nixpkgs_zed.url = "github:nixos/nixpkgs?rev=d233eb89118bcc22856ac7d511ef56c146567c8b";
+    nixpkgs_jj-fzf.url = "github:bbigras/nixpkgs/push-qsnkmvlwnrvm";
 
-    lix = {
-      url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
-      flake = false;
-    };
-    lix-module = {
-      url = "git+https://git.lix.systems/lix-project/nixos-module";
-      inputs.lix.follows = "lix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
 
     srvos = {
       url = "github:nix-community/srvos";
@@ -153,7 +144,7 @@
       inputs.home-manager.follows = "home-manager";
     };
 
-    catppuccin.url = "github:catppuccin/nix?rev=f52d2fc7c4f513c1a5d89f2911611333aee339da";
+    catppuccin.url = "github:catppuccin/nix";
 
     systems.url = "github:nix-systems/default";
 
@@ -161,10 +152,6 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nix-doom-emacs-unstraightened.url = "github:marienz/nix-doom-emacs-unstraightened";
-    # Optional, to download less. Neither the module nor the overlay uses this input.
-    nix-doom-emacs-unstraightened.inputs.nixpkgs.follows = "";
   };
 
   outputs = inputs@{ self, flake-parts, ... }:
