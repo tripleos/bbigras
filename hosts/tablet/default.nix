@@ -1,4 +1,4 @@
-{ pkgs, nur, catppuccin, nix-doom-emacs-unstraightened, ... }:
+{ pkgs, nur, catppuccin, ... }:
 
 let
   nurNoPkgs = import nur { pkgs = null; nurpkgs = pkgs; };
@@ -51,7 +51,6 @@ in
     '';
   };
   environment.sessionVariables = {
-    EDITOR = "doom-emacs";
   };
 
   android-integration = {
@@ -63,6 +62,7 @@ in
   };
 
   terminal = {
+    font = "${pkgs.nerd-fonts.iosevka}/share/fonts/truetype/NerdFonts/IosevkaNerdFontMono-Regular.ttf";
     colors = {
       background = "#1e1e2e";
       foreground = "#cdd6f4";
@@ -191,6 +191,7 @@ in
             VerifyHostKeyDNS = "ask";
           };
         };
+        starship.enable = true;
         tealdeer.enable = true;
         zoxide.enable = true;
         zellij.enable = true;
@@ -241,12 +242,8 @@ in
         talosctl
         nix-output-monitor
         attic-client
-
-        (pkgs.doomEmacs {
-          doomDir = ../../doomDir;
-          doomLocalDir = "~/.local/share/nix-doom";
-          emacs = pkgs.emacs-nox;
-        })
+        git-annex
+        git-remote-gcrypt
       ];
 
       dconf.enable = lib.mkForce false;
